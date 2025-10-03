@@ -26,20 +26,24 @@ def calculate_annualized_stats(returns, excess_returns, tau=TAU):
     """Calculate annualized mean, volatility and Sharpe ratio"""
     
     # Monthly statistics
-    mean_monthly = returns.mean()
-    vol_monthly = returns.std()
+    #mean_monthly = returns.mean()
+    #vol_monthly = returns.std()
     excess_mean_monthly = excess_returns.mean()
+    excess_vol_monthly = excess_returns.std()
     
     # Annualized statistics
-    mean_annualized = mean_monthly * tau
-    vol_annualized = vol_monthly * np.sqrt(tau)
-    # Sharpe ratio using excess returns
-    sharpe = excess_mean_monthly / vol_monthly
+    #mean_annualized = mean_monthly * tau
+    #vol_annualized = vol_monthly * np.sqrt(tau)
+    excess_mean_annualized = excess_mean_monthly * tau
+    excess_vol_annualized = excess_vol_monthly * np.sqrt(tau)
+
+    # Sharpe ratio using annualized excess returns and vols
+    sharpe_annualized = excess_mean_annualized / excess_vol_annualized
     
     stats = pd.DataFrame({
-        'Mean Return (Annualized)': mean_annualized,
-        'Volatility (Annualized)': vol_annualized,
-        'Sharpe Ratio': sharpe
+        'Excess Return Mean': excess_mean_annualized,
+        'Excess Return Volatility': excess_vol_annualized,
+        'Sharpe Ratio': sharpe_annualized
     })
     
     return stats
