@@ -61,11 +61,11 @@ print(results)
 print("\n2.2 Descriptive Analysis")
 
 # 2.2 Descriptive Analysis
-def correlation_analysis(returns: pd.DataFrame):
+def correlation_analysis(excess_returns: pd.DataFrame):
     """Analyze correlations between assets"""
     
     # 1. Compute correlation matrix
-    corr_matrix = returns.corr()
+    corr_matrix = excess_returns.corr()
 
     # 2. Extract upper triangle (exclude diagonal and duplicates)
     mask = np.triu(np.ones(corr_matrix.shape), k=1).astype(bool)
@@ -89,8 +89,8 @@ def correlation_analysis(returns: pd.DataFrame):
     
     return results
 
-# pirnt results
-results_corr = correlation_analysis(returns)
+# print results
+results_corr = correlation_analysis(excess_returns)
 
 print("Correlation matrix:")
 print(results_corr["correlation_matrix"])
