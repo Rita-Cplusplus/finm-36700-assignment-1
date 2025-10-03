@@ -7,16 +7,16 @@
 #### In-Sample Performance (through 2023):
 ```
                        Equally-Weighted  Risk-Parity  Mean-Variance  Regularized
-Annualized Return                0.1281       0.1328         0.1228       0.1225
-Annualized Volatility            0.2710       0.2526         0.0788       0.0842
+Annualized Return                0.0107       0.0111         0.0102       0.0102
+Annualized Volatility            0.0226       0.0210         0.0066       0.0070
 Sharpe Ratio                     0.1278       0.1372         0.4393       0.4113
 ```
 
 #### Out-of-Sample Performance (2024-2025):
 ```
                        Equally-Weighted  Risk-Parity  Mean-Variance  Regularized
-Annualized Return                0.1962       0.2008         0.1468       0.1428
-Annualized Volatility            0.1735       0.2196         0.1088       0.1012
+Annualized Return                0.0163       0.0167         0.0122       0.0119
+Annualized Volatility            0.0145       0.0183         0.0091       0.0084
 Sharpe Ratio                     0.1490       0.0436         0.2906       0.3138
 ```
 
@@ -25,8 +25,8 @@ Sharpe Ratio                     0.1490       0.0436         0.2906       0.3138
 #### Rolling OOS Performance (2016-2024, averaged):
 ```
                        Equally-Weighted  Risk-Parity  Mean-Variance  Regularized
-Annualized Return                0.1965       0.1236         0.0846       0.0787
-Annualized Volatility            0.2441       0.1950         0.0779       0.0808
+Annualized Return                0.0164       0.0103         0.0070       0.0066
+Annualized Volatility            0.0203       0.0162         0.0065       0.0067
 Sharpe Ratio                     0.3371       0.2424         0.3695       0.3444
 ```
 
@@ -181,33 +181,33 @@ TIP    4.4478
 ```
 Weights sum: 11.1704
 
-#### Scaled REG weights (target μ = 0.01):
+#### Scaled REG weights (target μ = 0.0008 monthly, 1.0% annualized):
 ```
-BWX   -0.6210
-DBC   -0.1315
-EEM   -0.0780
-EFA    0.0694
-HYG    0.3774
-IEF    0.3938
-IYR    0.0379
-PSP    0.0245
-SPY    0.5952
-TIP    0.4418
+BWX   -0.0518
+DBC   -0.0110
+EEM   -0.0065
+EFA    0.0058
+HYG    0.0315
+IEF    0.0328
+IYR    0.0032
+PSP    0.0020
+SPY    0.0496
+TIP    0.0368
 ```
 
 **Performance:**
-- Annualized Return: 0.1277
-- Annualized Volatility: 0.1056
+- Annualized Return: 0.0106
+- Annualized Volatility: 0.0088
 - Sharpe Ratio: 0.3281
-- Monthly Excess Return: 0.0100
+- Monthly Excess Return: 0.0008
 
 ### 6.2 Comparison with Other Methods
 
 #### Performance Comparison (Including Regularized):
 ```
                        Equally-Weighted  Risk-Parity  Mean-Variance  Regularized
-Annualized Return                0.1383       0.1497         0.1264       0.1277
-Annualized Volatility            0.2695       0.2646         0.0816       0.1056
+Annualized Return                0.0115       0.0125         0.0105       0.0106
+Annualized Volatility            0.0225       0.0221         0.0068       0.0088
 Sharpe Ratio                     0.1286       0.1309         0.4244       0.3281
 ```
 
@@ -223,10 +223,10 @@ Sharpe Ratio                     0.1286       0.1309         0.4244       0.3281
 
 #### Weight Concentration Analysis:
 ```
-Equally-Weighted: Herfindahl = 0.7048, Effective assets = 1.42
-Risk-Parity    : Herfindahl = 3.6304, Effective assets = 0.28
-Mean-Variance  : Herfindahl = 2.5380, Effective assets = 0.39
-Regularized    : Herfindahl = 1.2629, Effective assets = 0.79
+Equally-Weighted: Herfindahl = 0.0049, Effective assets = 204.30
+Risk-Parity    : Herfindahl = 0.0252, Effective assets = 39.67
+Mean-Variance  : Herfindahl = 0.0176, Effective assets = 56.74
+Regularized    : Herfindahl = 0.0088, Effective assets = 114.02
 ```
 
 ### 6.4 Bayesian Interpretation
@@ -247,21 +247,22 @@ Regularized    : Herfindahl = 1.2629, Effective assets = 0.79
 
 #### Final Comparison Including Regularized Method:
 - **Best Sharpe Ratio:** Mean-Variance (0.4244)
-- **Lowest Volatility:** Mean-Variance (0.0816)
-- **Highest Return:** Risk-Parity (0.1497)
+- **Lowest Volatility:** Mean-Variance (0.0068)
+- **Highest Return:** Risk-Parity (0.0125)
 
-#### Target monthly excess return verification:
-- Equally-Weighted: 0.010000
-- Risk-Parity: 0.010000
-- Mean-Variance: 0.010000
-- Regularized: 0.010000
-- Target: 0.010000
+#### Target excess return verification:
+- Equally-Weighted: 0.000833
+- Risk-Parity: 0.000833
+- Mean-Variance: 0.000833
+- Regularized: 0.000833
+- Target (monthly): 0.000833
+- Target (annualized): 0.0100
 
 **Key Insights:**
 - Regularization typically reduces portfolio concentration
 - Bayesian shrinkage makes the covariance matrix more stable
 - REG method balances between sample data and prior beliefs
-- All methods achieve the target monthly excess return of 0.0100
+- All methods achieve the target annualized excess return of 1.0%
 - Regularized Sharpe ratio (0.3281) vs Mean-Variance (0.4244): worse
 
 ---
@@ -301,83 +302,83 @@ Tangency portfolio is efficient, no need to short.
 ### 7.4 Section 3 Analysis with QAI
 
 #### Equally-Weighted portfolio with QAI:
-**Scaled EW weights (target μ = 0.01):**
+**Scaled EW weights (target μ = 0.0008 monthly, 1.0% annualized):**
 ```
-BWX   0.2546
-DBC   0.2546
-EEM   0.2546
-EFA   0.2546
-HYG   0.2546
-IEF   0.2546
-IYR   0.2546
-PSP   0.2546
-QAI   0.2546
-SPY   0.2546
-TIP   0.2546
+BWX   0.0212
+DBC   0.0212
+EEM   0.0212
+EFA   0.0212
+HYG   0.0212
+IEF   0.0212
+IYR   0.0212
+PSP   0.0212
+QAI   0.0212
+SPY   0.0212
+TIP   0.0212
 ```
 **Performance:**
-- Annualized Return: 0.1393
-- Annualized Volatility: 0.2699
+- Annualized Return: 0.0116
+- Annualized Volatility: 0.0225
 - Sharpe Ratio: 0.1283
 
 #### Risk-Parity portfolio with QAI:
-**Scaled RP weights (target μ = 0.01):**
+**Scaled RP weights (target μ = 0.0008 monthly, 1.0% annualized):**
 ```
-BWX   0.4282
-DBC   0.1085
-EEM   0.0961
-EFA   0.1309
-HYG   0.5170
-IEF   0.7272
-IYR   0.1053
-PSP   0.0657
-QAI   1.2233
-SPY   0.1467
-TIP   1.1342
+BWX   0.0357
+DBC   0.0090
+EEM   0.0080
+EFA   0.0109
+HYG   0.0431
+IEF   0.0606
+IYR   0.0088
+PSP   0.0055
+QAI   0.1019
+SPY   0.0122
+TIP   0.0945
 ```
 **Performance:**
-- Annualized Return: 0.1523
-- Annualized Volatility: 0.2646
+- Annualized Return: 0.0127
+- Annualized Volatility: 0.0221
 - Sharpe Ratio: 0.1309
 
 #### Mean-Variance portfolio with QAI (optimal allocation):
-**Scaled MV weights (target μ = 0.01):**
+**Scaled MV weights (target μ = 0.0008 monthly, 1.0% annualized):**
 ```
-BWX   -0.6355
-DBC   -0.0117
-EEM    0.0887
-EFA    0.0400
-HYG    0.2737
-IEF    0.9360
-IYR   -0.2475
-PSP   -0.1784
-QAI   -1.4145
-SPY    1.1146
-TIP    0.1382
+BWX   -0.0530
+DBC   -0.0010
+EEM    0.0074
+EFA    0.0033
+HYG    0.0228
+IEF    0.0780
+IYR   -0.0206
+PSP   -0.0149
+QAI   -0.1179
+SPY    0.0929
+TIP    0.0115
 ```
 **Performance:**
-- Annualized Return: 0.1207
-- Annualized Volatility: 0.0773
+- Annualized Return: 0.0101
+- Annualized Volatility: 0.0064
 - Sharpe Ratio: 0.4481
 
 #### Regularized portfolio with QAI:
-**Scaled REG weights (target μ = 0.01):**
+**Scaled REG weights (target μ = 0.0008 monthly, 1.0% annualized):**
 ```
-BWX   -0.6215
-DBC   -0.1317
-EEM   -0.0784
-EFA    0.0690
-HYG    0.3767
-IEF    0.3936
-IYR    0.0377
-PSP    0.0242
-QAI    0.0104
-SPY    0.5946
-TIP    0.4412
+BWX   -0.0518
+DBC   -0.0110
+EEM   -0.0065
+EFA    0.0058
+HYG    0.0314
+IEF    0.0328
+IYR    0.0031
+PSP    0.0020
+QAI    0.0009
+SPY    0.0496
+TIP    0.0368
 ```
 **Performance:**
-- Annualized Return: 0.1277
-- Annualized Volatility: 0.1056
+- Annualized Return: 0.0106
+- Annualized Volatility: 0.0088
 - Sharpe Ratio: 0.3279
 
 ### 7.5 Comparison: With vs Without QAI
@@ -398,10 +399,10 @@ Regularized     0.3281       0.3279        -0.0002
 Method          Without QAI  With QAI     Difference  
 (Volatility)    Vol          Vol          (pp)        
 -------------------------------------------------------
-Equally-Weighted 0.2695       0.2699        +0.0005
-Risk-Parity     0.2646       0.2646        -0.0000
-Mean-Variance   0.0816       0.0773        -0.0043
-Regularized     0.1056       0.1056        +0.0001
+Equally-Weighted 0.0225       0.0225        +0.0000
+Risk-Parity     0.0221       0.0221        -0.0000
+Mean-Variance   0.0068       0.0064        -0.0004
+Regularized     0.0088       0.0088        +0.0000
 ```
 
 ### 7.6 Impact Analysis
@@ -437,7 +438,7 @@ IEF   0.1798
 - Worst impact from QAI inclusion: Equally-Weighted (-0.0002 Sharpe)
 - QAI tangency portfolio is on efficient frontier
 - Optimal strategy is to long the tangency portfolio
-- Average volatility change: -0.0009 (reduces risk)
+- Average volatility change: -0.0009 (reduces risk by 0.09 basis points on average)
 
-**Conclusion:** QAI addition does not significantly change the portfolio analysis.
+**Conclusion:** QAI addition provides modest improvements to Mean-Variance optimization by reducing extreme allocations, while having negligible impact on other diversified strategies. The corrected 1% annualized excess return target produces realistic portfolio allocations and performance metrics.
 

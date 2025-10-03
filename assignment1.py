@@ -178,12 +178,14 @@ print("\n3. Allocations")
 
 # Part 3: Allocations
 
-# Target monthly excess return
-target_mu = 0.01
+# Target annualized excess return is 1%, so monthly target is 1%/12
+target_mu_annual = 0.01
+target_mu = target_mu_annual / 12  # Monthly target = 0.01/12 ≈ 0.0083
 
 def rescale_weights_to_target(weights, returns, excess_returns, target_mu):
     """
     Rescale weights to achieve target monthly excess return
+    (corresponding to 1% annualized excess return)
     """
     # Calculate portfolio expected excess return with current weights
     portfolio_excess_return = np.dot(weights, excess_returns.mean())
@@ -237,7 +239,7 @@ ew_weights_scaled = rescale_weights_to_target(ew_weights, returns, excess_return
 
 print("\nOriginal EW weights:")
 print(ew_weights)
-print(f"\nScaled EW weights (target μ = {target_mu}):")
+print(f"\nScaled EW weights (target μ = {target_mu:.4f} monthly, {target_mu_annual:.1%} annualized):")
 print(ew_weights_scaled)
 
 ew_performance = calculate_portfolio_performance(ew_weights_scaled, returns, excess_returns)
@@ -261,7 +263,7 @@ rp_weights_scaled = rescale_weights_to_target(rp_weights, returns, excess_return
 
 print("\nRisk-parity weights (inverse variance):")
 print(rp_weights)
-print(f"\nScaled RP weights (target μ = {target_mu}):")
+print(f"\nScaled RP weights (target μ = {target_mu:.4f} monthly, {target_mu_annual:.1%} annualized):")
 print(rp_weights_scaled)
 
 rp_performance = calculate_portfolio_performance(rp_weights_scaled, returns, excess_returns)
@@ -283,7 +285,7 @@ mv_weights_scaled = rescale_weights_to_target(mv_weights, returns, excess_return
 
 print("Original MV (tangency) weights:")
 print(mv_weights)
-print(f"\nScaled MV weights (target μ = {target_mu}):")
+print(f"\nScaled MV weights (target μ = {target_mu:.4f} monthly, {target_mu_annual:.1%} annualized):")
 print(mv_weights_scaled)
 
 mv_performance = calculate_portfolio_performance(mv_weights_scaled, returns, excess_returns)
@@ -324,15 +326,17 @@ lowest_vol_method = comparison_df.loc['Annualized Volatility'].idxmin()
 print(f"Best Sharpe Ratio: {best_method} ({best_sharpe:.4f})")
 print(f"Lowest Volatility: {lowest_vol_method} ({lowest_vol:.4f})")
 
-print(f"\nTarget monthly excess return verification:")
+print(f"\nTarget excess return verification:")
+print(f"Monthly excess returns:")
 print(f"EW: {ew_performance['excess_return_monthly']:.6f}")
 print(f"RP: {rp_performance['excess_return_monthly']:.6f}")
 print(f"MV: {mv_performance['excess_return_monthly']:.6f}")
-print(f"Target: {target_mu:.6f}")
+print(f"Target (monthly): {target_mu:.6f}")
+print(f"Target (annualized): {target_mu_annual:.4f}")
 
 print(f"- Mean-Variance optimization provides the best risk-adjusted returns (Sharpe ratio: {best_sharpe:.4f})")
 print(f"- Mean-Variance provides the lowest volatility ({lowest_vol:.4f} vs EW: {comparison_df.loc['Annualized Volatility', 'Equally-Weighted']:.4f}, RP: {comparison_df.loc['Annualized Volatility', 'Risk-Parity']:.4f})")
 print(f"- Risk-Parity achieves the highest return ({comparison_df.loc['Annualized Return', 'Risk-Parity']:.4f}) but with much higher volatility")
-print(f"- All three methods successfully achieve the target monthly excess return of {target_mu:.4f}")
+print(f"- All three methods successfully achieve the target annualized excess return of {target_mu_annual:.1%}")
 print(f"- Mean-Variance dominates both alternatives in risk-adjusted performance")
 

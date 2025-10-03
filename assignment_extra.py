@@ -424,7 +424,7 @@ print(f"when no risk-free asset is available, unlike the simple scaling with a r
 
 print("6. EXTRA: Bayesian Allocation")
 
-def calculate_regularized_allocation(excess_returns, target_mu=0.01):
+def calculate_regularized_allocation(excess_returns, target_mu_monthly=None):
     """
     Calculate regularized (REG) allocation using a regularized covariance matrix.
     
@@ -433,6 +433,8 @@ def calculate_regularized_allocation(excess_returns, target_mu=0.01):
     
     Weights are proportional to: Σ_reg^(-1) * μ
     """
+    if target_mu_monthly is None:
+        target_mu_monthly = target_mu 
     # Sample covariance matrix (monthly)
     cov_matrix = excess_returns.cov()
     
@@ -469,7 +471,7 @@ print(f"\nWeights sum: {reg_weights.sum():.4f}")
 # Scale to achieve target monthly excess return
 reg_weights_scaled = rescale_weights_to_target(reg_weights, returns, excess_returns, target_mu)
 
-print(f"\nScaled REG weights (target μ = {target_mu}):")
+print(f"\nScaled REG weights (target μ = {target_mu:.4f} monthly, {target_mu*12:.1%} annualized):")
 print(reg_weights_scaled.round(4))
 
 # Performance
@@ -574,16 +576,17 @@ print(f"Best Sharpe Ratio: {best_sharpe_method} ({best_sharpe:.4f})")
 print(f"Lowest Volatility: {lowest_vol_method} ({lowest_vol:.4f})")
 print(f"Highest Return: {highest_return_method} ({highest_return:.4f})")
 
-print(f"\nTarget monthly excess return verification:")
+print(f"\nTarget excess return verification:")
 for method_name, perf in performance_comparison.items():
     print(f"{method_name}: {perf['excess_return_monthly']:.6f}")
-print(f"Target: {target_mu:.6f}")
+print(f"Target (monthly): {target_mu:.6f}")
+print(f"Target (annualized): {target_mu*12:.4f}")
 
 print(f"\nKey Insights:")
 print(f"- Regularization typically reduces portfolio concentration")
 print(f"- Bayesian shrinkage makes the covariance matrix more stable")
 print(f"- REG method balances between sample data and prior beliefs")
-print(f"- All methods achieve the target monthly excess return of {target_mu:.4f}")
+print(f"- All methods achieve the target annualized excess return of {target_mu*12:.1%}")
 
 reg_sharpe = performance_comparison['Regularized']['sharpe_ratio']
 mv_sharpe = performance_comparison['Mean-Variance']['sharpe_ratio']
@@ -680,7 +683,7 @@ ew_weights_qai_scaled = rescale_weights_to_target_qai(ew_weights_qai, returns_wi
 ew_performance_qai = calculate_portfolio_performance_qai(ew_weights_qai_scaled, returns_with_qai, excess_returns_with_qai)
 
 print(f"\nEqually-Weighted portfolio with QAI:")
-print(f"Scaled EW weights (target μ = {target_mu}):")
+print(f"Scaled EW weights (target μ = {target_mu:.4f} monthly, {target_mu*12:.1%} annualized):")
 print(ew_weights_qai_scaled.round(4))
 print(f"Performance:")
 print(f"Annualized Return: {ew_performance_qai['return']:.4f}")
@@ -695,7 +698,7 @@ rp_weights_qai_scaled = rescale_weights_to_target_qai(rp_weights_qai, returns_wi
 rp_performance_qai = calculate_portfolio_performance_qai(rp_weights_qai_scaled, returns_with_qai, excess_returns_with_qai)
 
 print(f"\nRisk-Parity portfolio with QAI:")
-print(f"Scaled RP weights (target μ = {target_mu}):")
+print(f"Scaled RP weights (target μ = {target_mu:.4f} monthly, {target_mu*12:.1%} annualized):")
 print(rp_weights_qai_scaled.round(4))
 print(f"Performance:")
 print(f"Annualized Return: {rp_performance_qai['return']:.4f}")
@@ -707,7 +710,7 @@ mv_weights_qai_scaled = rescale_weights_to_target_qai(optimal_weights, returns_w
 mv_performance_qai = calculate_portfolio_performance_qai(mv_weights_qai_scaled, returns_with_qai, excess_returns_with_qai)
 
 print(f"\nMean-Variance portfolio with QAI (optimal allocation):")
-print(f"Scaled MV weights (target μ = {target_mu}):")
+print(f"Scaled MV weights (target μ = {target_mu:.4f} monthly, {target_mu*12:.1%} annualized):")
 print(mv_weights_qai_scaled.round(4))
 print(f"Performance:")
 print(f"Annualized Return: {mv_performance_qai['return']:.4f}")
@@ -733,7 +736,7 @@ reg_weights_qai_scaled = rescale_weights_to_target_qai(reg_weights_qai, returns_
 reg_performance_qai = calculate_portfolio_performance_qai(reg_weights_qai_scaled, returns_with_qai, excess_returns_with_qai)
 
 print(f"\nRegularized portfolio with QAI:")
-print(f"Scaled REG weights (target μ = {target_mu}):")
+print(f"Scaled REG weights (target μ = {target_mu:.4f} monthly, {target_mu*12:.1%} annualized):")
 print(reg_weights_qai_scaled.round(4))
 print(f"Performance:")
 print(f"Annualized Return: {reg_performance_qai['return']:.4f}")
