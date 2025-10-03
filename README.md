@@ -101,3 +101,10 @@ The analysis uses `multi_asset_etf_data.xlsx` containing:
 Detailed results are saved in:
 - `problems_2_3_output.md`: Complete output for Problems 2-3
 - `problems_4_7_output.md`: Complete output for Problems 4-7
+
+## AI Usage Disclosure
+
+This project utilized AI assistance (GitHub Copilot) for output sorting and report generation. AI was used to help with:
+- Output formatting and analysis
+
+The code, mathematical concepts, portfolio theory implementation, and final analysis remain the student's original work and understanding.
