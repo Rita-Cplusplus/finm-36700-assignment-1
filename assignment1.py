@@ -181,9 +181,9 @@ print("\n3. Allocations")
 
 # Part 3: Allocations
 
-# Target annualized excess return is 1%, so monthly target is 1%/12
-target_mu_annual = 0.01
-target_mu = target_mu_annual / 12  # Monthly target = 0.01/12 ≈ 0.0083
+# Target monthly excess return is 1%
+target_mu = 0.01
+target_mu_annual = target_mu * 12
 
 def rescale_weights_to_target(weights, returns, excess_returns, target_mu):
     """
@@ -209,18 +209,17 @@ def calculate_portfolio_performance(weights, returns, excess_returns, tau=TAU):
     Calculate portfolio performance metrics
     """
     # Monthly performance
-    portfolio_return_monthly = np.dot(weights, returns.mean())
     portfolio_excess_return_monthly = np.dot(weights, excess_returns.mean())
     
     # Portfolio variance and volatility
-    cov_matrix = returns.cov()
+    cov_matrix = excess_returns.cov()
     portfolio_variance_monthly = np.dot(weights.T, np.dot(cov_matrix, weights))
     portfolio_volatility_monthly = np.sqrt(portfolio_variance_monthly)
     
     # Annualized metrics
-    portfolio_return_annualized = portfolio_return_monthly * tau
+    portfolio_return_annualized = portfolio_excess_return_monthly * tau
     portfolio_volatility_annualized = portfolio_volatility_monthly * np.sqrt(tau)
-    portfolio_sharpe_ratio = portfolio_excess_return_monthly / portfolio_volatility_monthly
+    portfolio_sharpe_ratio = portfolio_return_annualized / portfolio_volatility_annualized
     
     return {
         'return': portfolio_return_annualized,
@@ -242,7 +241,7 @@ ew_weights_scaled = rescale_weights_to_target(ew_weights, returns, excess_return
 
 print("\nOriginal EW weights:")
 print(ew_weights)
-print(f"\nScaled EW weights (target μ = {target_mu:.4f} monthly, {target_mu_annual:.1%} annualized):")
+print(f"\nScaled EW weights (target μ = {target_mu:.4f} monthly, {target_mu * 12:.1%} annualized):")
 print(ew_weights_scaled)
 
 ew_performance = calculate_portfolio_performance(ew_weights_scaled, returns, excess_returns)
@@ -257,7 +256,7 @@ print("\n3-2. Risk-parity (RP) portfolio")
 # 3-2. Risk-parity (RP) portfolio
 
 # Calculate inverse variance weights
-variances = returns.var()
+variances = excess_returns.var()
 inv_variances = 1.0 / variances
 rp_weights = inv_variances / inv_variances.sum()
 
