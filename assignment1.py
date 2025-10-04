@@ -105,26 +105,25 @@ def tangency_portfolio_analysis(returns: pd.DataFrame, excess_returns: pd.DataFr
     
     # mean excess returns
     excess_mean_monthly = excess_returns.mean()
-    excess_mean_annualized = excess_mean_monthly * TAU
 
     # covariance matrix
-    sigma_matrix = returns.cov()
+    sigma_matrix = excess_returns.cov()
     sigma_inv = np.linalg.inv(sigma_matrix)
 
     # tangency portfolio weights
-    unscaled_weight = np.dot(sigma_inv, excess_mean_annualized)
+    unscaled_weight = np.dot(sigma_inv, excess_mean_monthly)
     scaling_constant = np.sum(unscaled_weight)
     weights = unscaled_weight / scaling_constant
     w_tan = pd.Series(weights.flatten(), index=returns.columns)
 
     # portfolio performance
-    portfolio_return_monthly = np.dot(w_tan, returns.mean())
+    portfolio_return_monthly = np.dot(w_tan, excess_returns.mean())
     portfolio_return_annualized = portfolio_return_monthly * TAU
 
     portfolio_volatility_monthly = np.sqrt(np.dot(w_tan.T, np.dot(sigma_matrix, w_tan)))
     portfolio_volatility_annualized = portfolio_volatility_monthly * np.sqrt(TAU)
 
-    portfolio_sharpe_ratio = np.dot(w_tan, excess_mean_monthly) / portfolio_volatility_monthly
+    portfolio_sharpe_ratio = portfolio_return_annualized / portfolio_volatility_annualized
 
     # collect results
     results = {
