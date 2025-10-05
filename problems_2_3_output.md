@@ -110,109 +110,110 @@ SPY   0.1000
 TIP   0.1000
 ```
 
-#### Scaled EW weights (target μ = 0.0008 monthly, 1.0% annualized):
+#### Scaled EW weights (target μ = 0.0100 monthly, 12.0% annualized):
 ```
-BWX   0.0221
-DBC   0.0221
-EEM   0.0221
-EFA   0.0221
-HYG   0.0221
-IEF   0.0221
-IYR   0.0221
-PSP   0.0221
-SPY   0.0221
-TIP   0.0221
+BWX   0.2655
+DBC   0.2655
+EEM   0.2655
+EFA   0.2655
+HYG   0.2655
+IEF   0.2655
+IYR   0.2655
+PSP   0.2655
+SPY   0.2655
+TIP   0.2655
+dtype: float64
 ```
 
 **Performance:**
-- Annualized Return: 0.0115
-- Annualized Volatility: 0.0225
-- Sharpe Ratio: 0.1286
-- Monthly Excess Return: 0.0008
+- Annualized Return: 0.1200
+- Annualized Volatility: 0.2692
+- Sharpe Ratio: 0.4457
+- Monthly Excess Return: 0.0100
 
 ### 3-2. Risk-parity (RP) portfolio
 
 #### Risk-parity weights (inverse variance):
 ```
-BWX   0.1238
-DBC   0.0314
-EEM   0.0278
-EFA   0.0379
-HYG   0.1494
-IEF   0.2102
-IYR   0.0304
-PSP   0.0190
-SPY   0.0424
-TIP   0.3278
+BWX   0.1248
+DBC   0.0308
+EEM   0.0276
+EFA   0.0376
+HYG   0.1484
+IEF   0.2126
+IYR   0.0301
+PSP   0.0188
+SPY   0.0419
+TIP   0.3274
 ```
 
 #### Scaled RP weights (target μ = 0.0008 monthly, 1.0% annualized):
 ```
-BWX   0.0444
-DBC   0.0113
-EEM   0.0100
-EFA   0.0136
-HYG   0.0536
-IEF   0.0755
-IYR   0.0109
-PSP   0.0068
-SPY   0.0152
-TIP   0.1177
+BWX   0.5406
+DBC   0.1336
+EEM   0.1194
+EFA   0.1627
+HYG   0.6427
+IEF   0.9206
+IYR   0.1302
+PSP   0.0814
+SPY   0.1816
+TIP   1.4181
 ```
 
 **Performance:**
-- Annualized Return: 0.0125
-- Annualized Volatility: 0.0221
-- Sharpe Ratio: 0.1309
-- Monthly Excess Return: 0.0008
+- Annualized Return: 0.1200
+- Annualized Volatility: 0.2639
+- Sharpe Ratio: 0.4547
+- Monthly Excess Return: 0.0100
 
 ### 3-3. Mean-Variance (MV) portfolio
 
 #### Original MV (tangency) weights:
 ```
-BWX   -0.8654
-DBC   -0.0680
-EEM    0.0258
-EFA    0.0649
-HYG    0.2891
-IEF    0.8744
-IYR   -0.2427
-PSP   -0.3334
-SPY    1.0632
-TIP    0.1922
+BWX   -0.8506
+DBC   -0.0716
+EEM    0.0264
+EFA    0.0687
+HYG    0.2906
+IEF    0.8812
+IYR   -0.2466
+PSP   -0.3330
+SPY    1.0596
+TIP    0.1753
 ```
 
 #### Scaled MV weights (target μ = 0.0008 monthly, 1.0% annualized):
 ```
-BWX   -0.0670
-DBC   -0.0053
-EEM    0.0020
-EFA    0.0050
-HYG    0.0224
-IEF    0.0677
-IYR   -0.0188
-PSP   -0.0258
-SPY    0.0823
-TIP    0.0149
+BWX   -0.7942
+DBC   -0.0669
+EEM    0.0247
+EFA    0.0641
+HYG    0.2713
+IEF    0.8228
+IYR   -0.2302
+PSP   -0.3109
+SPY    0.9894
+TIP    0.1637
 ```
 
 **Performance:**
-- Annualized Return: 0.0105
-- Annualized Volatility: 0.0068
-- Sharpe Ratio: 0.4244
-- Monthly Excess Return: 0.0008
+- Annualized Return: 0.1200
+- Annualized Volatility: 0.0817
+- Sharpe Ratio: 1.4692
+- Monthly Excess Return: 0.0100
 
 ### 3-4. Performance Comparison
 
 ```
                        Equally-Weighted  Risk-Parity  Mean-Variance
-Annualized Return                0.0115       0.0125         0.0105
-Annualized Volatility            0.0225       0.0221         0.0068
-Sharpe Ratio                     0.1286       0.1309         0.4244
+Annualized Return                0.1200       0.1200         0.1200
+Annualized Volatility            0.2692       0.2639         0.0817
+Sharpe Ratio                     0.4457       0.4547         1.4692
 ```
 
-**Best Sharpe Ratio:** Mean-Variance (0.4244)  
-**Lowest Volatility:** Mean-Variance (0.0068)
+**Best Sharpe Ratio:** Mean-Variance (1.4692)
+**Lowest Volatility:** Mean-Variance (0.0817)
 
 ### Target Excess Return Verification:
 **Monthly excess returns:**
