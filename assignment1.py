@@ -26,20 +26,24 @@ def calculate_annualized_stats(returns, excess_returns, tau=TAU):
     """Calculate annualized mean, volatility and Sharpe ratio"""
     
     # Monthly statistics
-    mean_monthly = returns.mean()
-    vol_monthly = returns.std()
+    # mean_monthly = returns.mean()
+    #vol_monthly = returns.std()
     excess_mean_monthly = excess_returns.mean()
+    excess_vol_monthly = excess_returns.std()
     
     # Annualized statistics
-    mean_annualized = mean_monthly * tau
-    vol_annualized = vol_monthly * np.sqrt(tau)
-    # Sharpe ratio using excess returns
-    sharpe = excess_mean_monthly / vol_monthly
+    #mean_annualized = mean_monthly * tau
+    #vol_annualized = vol_monthly * np.sqrt(tau)
+    excess_mean_annualized = excess_mean_monthly * tau
+    excess_vol_annualized = excess_vol_monthly * np.sqrt(tau)
+    
+    # Sharpe ratio using annualized excess returns and vols
+    sharpe_annualized = excess_mean_annualized / excess_vol_annualized
     
     stats = pd.DataFrame({
-        'Mean Return (Annualized)': mean_annualized,
-        'Volatility (Annualized)': vol_annualized,
-        'Sharpe Ratio': sharpe
+        'Excess Return Mean': excess_mean_annualized,
+        'Excess Return Volatility': excess_vol_annualized,
+        'Sharpe Ratio': sharpe_annualized
     })
     
     return stats
@@ -57,11 +61,11 @@ print(results)
 print("\n2.2 Descriptive Analysis")
 
 # 2.2 Descriptive Analysis
-def correlation_analysis(returns: pd.DataFrame):
+def correlation_analysis(excess_returns: pd.DataFrame):
     """Analyze correlations between assets"""
     
     # 1. Compute correlation matrix
-    corr_matrix = returns.corr()
+    corr_matrix = excess_returns.corr()
 
     # 2. Extract upper triangle (exclude diagonal and duplicates)
     mask = np.triu(np.ones(corr_matrix.shape), k=1).astype(bool)
@@ -85,8 +89,8 @@ def correlation_analysis(returns: pd.DataFrame):
     
     return results
 
-# pirnt results
-results_corr = correlation_analysis(returns)
+# print results
+results_corr = correlation_analysis(excess_returns)
 
 print("Correlation matrix:")
 print(results_corr["correlation_matrix"])
@@ -101,26 +105,25 @@ def tangency_portfolio_analysis(returns: pd.DataFrame, excess_returns: pd.DataFr
     
     # mean excess returns
     excess_mean_monthly = excess_returns.mean()
-    excess_mean_annualized = excess_mean_monthly * TAU
 
     # covariance matrix
-    sigma_matrix = returns.cov()
+    sigma_matrix = excess_returns.cov()
     sigma_inv = np.linalg.inv(sigma_matrix)
 
     # tangency portfolio weights
-    unscaled_weight = np.dot(sigma_inv, excess_mean_annualized)
+    unscaled_weight = np.dot(sigma_inv, excess_mean_monthly)
     scaling_constant = np.sum(unscaled_weight)
     weights = unscaled_weight / scaling_constant
     w_tan = pd.Series(weights.flatten(), index=returns.columns)
 
     # portfolio performance
-    portfolio_return_monthly = np.dot(w_tan, returns.mean())
+    portfolio_return_monthly = np.dot(w_tan, excess_returns.mean())
     portfolio_return_annualized = portfolio_return_monthly * TAU
 
     portfolio_volatility_monthly = np.sqrt(np.dot(w_tan.T, np.dot(sigma_matrix, w_tan)))
     portfolio_volatility_annualized = portfolio_volatility_monthly * np.sqrt(TAU)
 
-    portfolio_sharpe_ratio = np.dot(w_tan, excess_mean_monthly) / portfolio_volatility_monthly
+    portfolio_sharpe_ratio = portfolio_return_annualized / portfolio_volatility_annualized
 
     # collect results
     results = {
@@ -178,9 +181,9 @@ print("\n3. Allocations")
 
 # Part 3: Allocations
 
-# Target annualized excess return is 1%, so monthly target is 1%/12
-target_mu_annual = 0.01
-target_mu = target_mu_annual / 12  # Monthly target = 0.01/12 ≈ 0.0083
+# Target monthly excess return is 1%
+target_mu = 0.01
+target_mu_annual = target_mu * 12
 
 def rescale_weights_to_target(weights, returns, excess_returns, target_mu):
     """
@@ -210,14 +213,14 @@ def calculate_portfolio_performance(weights, returns, excess_returns, tau=TAU):
     portfolio_excess_return_monthly = np.dot(weights, excess_returns.mean())
     
     # Portfolio variance and volatility
-    cov_matrix = returns.cov()
+    cov_matrix = excess_returns.cov()
     portfolio_variance_monthly = np.dot(weights.T, np.dot(cov_matrix, weights))
     portfolio_volatility_monthly = np.sqrt(portfolio_variance_monthly)
     
     # Annualized metrics
-    portfolio_return_annualized = portfolio_return_monthly * tau
+    portfolio_return_annualized = portfolio_excess_return_monthly * tau
     portfolio_volatility_annualized = portfolio_volatility_monthly * np.sqrt(tau)
-    portfolio_sharpe_ratio = portfolio_excess_return_monthly / portfolio_volatility_monthly
+    portfolio_sharpe_ratio = portfolio_return_annualized / portfolio_volatility_annualized
     
     return {
         'return': portfolio_return_annualized,
@@ -239,7 +242,7 @@ ew_weights_scaled = rescale_weights_to_target(ew_weights, returns, excess_return
 
 print("\nOriginal EW weights:")
 print(ew_weights)
-print(f"\nScaled EW weights (target μ = {target_mu:.4f} monthly, {target_mu_annual:.1%} annualized):")
+print(f"\nScaled EW weights (target μ = {target_mu:.4f} monthly, {target_mu * 12:.1%} annualized):")
 print(ew_weights_scaled)
 
 ew_performance = calculate_portfolio_performance(ew_weights_scaled, returns, excess_returns)
@@ -254,7 +257,7 @@ print("\n3-2. Risk-parity (RP) portfolio")
 # 3-2. Risk-parity (RP) portfolio
 
 # Calculate inverse variance weights
-variances = returns.var()
+variances = excess_returns.var()
 inv_variances = 1.0 / variances
 rp_weights = inv_variances / inv_variances.sum()
 
@@ -263,7 +266,7 @@ rp_weights_scaled = rescale_weights_to_target(rp_weights, returns, excess_return
 
 print("\nRisk-parity weights (inverse variance):")
 print(rp_weights)
-print(f"\nScaled RP weights (target μ = {target_mu:.4f} monthly, {target_mu_annual:.1%} annualized):")
+print(f"\nScaled RP weights (target μ = {target_mu:.4f} monthly, {target_mu * 12:.1%} annualized):")
 print(rp_weights_scaled)
 
 rp_performance = calculate_portfolio_performance(rp_weights_scaled, returns, excess_returns)
@@ -285,7 +288,7 @@ mv_weights_scaled = rescale_weights_to_target(mv_weights, returns, excess_return
 
 print("Original MV (tangency) weights:")
 print(mv_weights)
-print(f"\nScaled MV weights (target μ = {target_mu:.4f} monthly, {target_mu_annual:.1%} annualized):")
+print(f"\nScaled MV weights (target μ = {target_mu:.4f} monthly, {target_mu * 12:.1%} annualized):")
 print(mv_weights_scaled)
 
 mv_performance = calculate_portfolio_performance(mv_weights_scaled, returns, excess_returns)
